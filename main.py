@@ -37,3 +37,13 @@ scheduler = LMSDiscreteScheduler(beta_start=0.00085, beta_end=0.012, beta_schedu
 vae = vae.to(torch_device)
 text_encoder = text_encoder.to(torch_device)
 unet = unet.to(torch_device)
+
+# definition
+!ffmpeg -v 1 -y -f image2 -framerate 12 -i /content/drive/MyDrive/stablediff/denoising2/%04d.jpg -c:v libx264 -preset slow -qp 18 -pix_fmt yuv420p out.mp4
+mp4 = open('out.mp4','rb').read()
+data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
+HTML("""
+<video width=1536 controls>
+      <source src="%s" type="video/mp4">
+</video>
+""" % data_url)
